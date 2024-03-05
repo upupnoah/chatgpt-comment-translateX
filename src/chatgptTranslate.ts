@@ -9,7 +9,6 @@ const langMaps: Map<string, string> = new Map([
     ['zh-CN', 'ZH'],
     ['zh-TW', 'ZH'],
 ]);
-// 你好吗
 
 function convertLang(src: string) {
     if (langMaps.has(src)) {
