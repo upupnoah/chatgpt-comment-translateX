@@ -9,6 +9,7 @@ const langMaps: Map<string, string> = new Map([
     ['zh-CN', 'ZH'],
     ['zh-TW', 'ZH'],
 ]);
+// 你好吗
 
 function convertLang(src: string) {
     if (langMaps.has(src)) {
@@ -55,14 +56,12 @@ export class ChatGPTTranslate implements ITranslate {
     }
 
     async translate(content: string, { to = 'auto' }: ITranslateOptions) {
-        const url = this._defaultOption.apiAddress;
-
+        const url = this._defaultOption.apiAddress + "/v1/chat/completions";
         if (!this._defaultOption.authKey) {
             throw new Error('Please check the configuration of authKey!');
         }
         let systemPrompt = "You are a translation engine that can only translate text and cannot interpret it.";
-        let userPrompt = `translate from en to zh-Hans`;
-        userPrompt = `${userPrompt}:\n\n"${content}" =>`;
+        let userPrompt = `translate from en to zh-Hans: "${content}" =>`;
         const body = {
             model: this._defaultOption.model,
             temperature: 0,
@@ -84,23 +83,23 @@ export class ChatGPTTranslate implements ITranslate {
             Authorization: `Bearer ${this._defaultOption.authKey}`,
         };
 
-        let res = await axios.post(url, body, {
-            headers
-        });
+        let res = await axios.post(url, body, { headers });
         const { choices } = res.data;
         let targetTxt = choices[0].message.content.trim();
-        if (targetTxt.startsWith('"') || targetTxt.startsWith("「")) {
-            targetTxt = targetTxt.slice(1);
-        }
-        if (targetTxt.endsWith('"') || targetTxt.endsWith("」")) {
-            targetTxt = targetTxt.slice(0, -1);
-        }
-        return targetTxt.split("\n");
+
+        // 后处理：去除不需要的逗号（根据您的具体需求进行调整）
+        // 示例：替换不正确的逗号位置，或根据上下文判断是否保留
+        targetTxt = targetTxt.replace(/,\s*,/g, ','); // 合并连续的逗号
+        targetTxt = targetTxt.replace(/，\s*，/g, '，'); // 对中文逗号进行相同的处理
+        // 可以添加更多的替换规则来处理特定的格式问题
+
+        return targetTxt;
     }
 
 
     link(content: string, { to = 'auto' }: ITranslateOptions) {
-        let str = `${this._defaultOption.apiAddress}/${convertLang(to)}/${encodeURIComponent(content)}`;
+        let str = `${this._defaultOption.apiAddress}/v1/chat/completions/${convertLang(to)}/${encodeURIComponent(content)}`;
+
         return `[ChatGPT](${str})`;
     }
 
@@ -108,7 +107,6 @@ export class ChatGPTTranslate implements ITranslate {
         return true;
     }
 }
-
 
 
 

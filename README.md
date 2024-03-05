@@ -3,6 +3,12 @@
 
 The plugin provides a translation source for the ‘comment-translate’ plugin. Itself does not activate, it starts when enabled is selected.
 
+## Display
+- Effect
+    ![result](./image/result.png)
+- Custom settings
+    ![settings](./image/gpt.png)
+
 ## Features
 
 1. Provide translation capabilities
