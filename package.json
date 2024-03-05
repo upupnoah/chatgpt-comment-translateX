@@ -2,7 +2,7 @@
   "name": "chatgpt-comment-translateX",
   "displayName": "chatgpt-comment-translateX",
   "description": "chatgpt translate source for comment-translate",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "publisher": "upupnoah",
   "engines": {
     "vscode": "^1.70.0"
