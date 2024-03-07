@@ -58,9 +58,8 @@ export class ChatGPTTranslate implements ITranslate {
         if (!this._defaultOption.authKey) {
             throw new Error('Please check the configuration of authKey!');
         }
-        let systemPrompt = `As a professional translator with expertise in the IT domain, I excel in delivering translations that are both fluent and authentic, ensuring they accurately reflect the source material's nuance and context. 
-        My focus is on general IT content and terminology, avoiding the translation of specific programming concepts or language keywords to maintain their original integrity. I will provide you with the final, polished translation without intermediary steps or draft versions.`;
-        let userPrompt = `en to zh => ${content}`;
+        let systemPrompt = `You are a professional translation engine in the IT field, do not translate noun phrases and programming domain terms, only return the translation result.`;
+        let userPrompt = `en => zh: ${content}`;
         const body = {
             model: this._defaultOption.model,
             temperature: 0.3,
