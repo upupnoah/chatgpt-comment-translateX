@@ -53,18 +53,18 @@ export class ChatGPTTranslate implements ITranslate {
         };
         return defaultOption;
     }
-
     async translate(content: string, { to = 'auto' }: ITranslateOptions) {
         const url = this._defaultOption.apiAddress + "/v1/chat/completions";
         if (!this._defaultOption.authKey) {
             throw new Error('Please check the configuration of authKey!');
         }
-        let systemPrompt = "You are a translation engine that can only translate text and cannot interpret it.";
-        let userPrompt = `translate from en to zh-Hans: "${content}" =>`;
+        let systemPrompt = `As a professional translator with expertise in the IT domain, I excel in delivering translations that are both fluent and authentic, ensuring they accurately reflect the source material's nuance and context. 
+        My focus is on general IT content and terminology, avoiding the translation of specific programming concepts or language keywords to maintain their original integrity. I will provide you with the final, polished translation without intermediary steps or draft versions.`;
+        let userPrompt = `en to zh => ${content}`;
         const body = {
             model: this._defaultOption.model,
-            temperature: 0,
-            max_tokens: 3000,
+            temperature: 0.3,
+            max_tokens: 1200,
             top_p: 1,
             frequency_penalty: 1,
             presence_penalty: 1,
@@ -84,20 +84,10 @@ export class ChatGPTTranslate implements ITranslate {
             Authorization: `Bearer ${this._defaultOption.authKey}`,
         };
 
-        // let res = await axios.post(url, body, { headers });
-        // const { choices } = res.data;
-        // let targetTxt = choices[0].message.content.trim();
-        // return targetTxt;
         let res = await axios.post(url, body, { headers });
         const { choices } = res.data;
-        // 将文本按行分割成数组
-        let lines = choices[0].message.content.split('\n');
-        // 去除每行的前后空格
-        let trimmedLines = lines.map((line: string) => line.trim());
-        // 将处理过的行合并为一个字符串，每行之间以换行符连接
-        let targetTxt = trimmedLines.join('\n');
+        let targetTxt = choices[0].message.content;
         return targetTxt;
-
     }
 
 
