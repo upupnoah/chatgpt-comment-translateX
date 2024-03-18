@@ -28,6 +28,8 @@ interface ChatGPTTranslateOption {
     authKey?: string;
     apiAddress?: string;
     model?: string;
+    systemPrompt?: string; // 新增的系统提示配置项
+    userPrompt?: string;  // 新增的用户提示配置项
 }
 
 export class ChatGPTTranslate implements ITranslate {
@@ -49,7 +51,9 @@ export class ChatGPTTranslate implements ITranslate {
         const defaultOption: ChatGPTTranslateOption = {
             authKey: getConfig<string>('authKey'),
             apiAddress: getConfig<string>('apiAddress'),
-            model: getConfig<string>('model')
+            model: getConfig<string>('model'),
+            systemPrompt: getConfig<string>('systemPrompt'), // 获取系统提示的配置项
+            userPrompt: getConfig<string>('userPrompt')  // 获取用户提示的配置项
         };
         return defaultOption;
     }
@@ -58,8 +62,8 @@ export class ChatGPTTranslate implements ITranslate {
         if (!this._defaultOption.authKey) {
             throw new Error('Please check the configuration of authKey!');
         }
-        let systemPrompt = `You are a professional translation engine in the IT field, do not translate noun phrases and programming domain terms, only return the translation result.`;
-        let userPrompt = `en => zh: ${content}`;
+        let systemPrompt = this._defaultOption.systemPrompt || `You are a professional translation engine in the IT field, do not translate noun phrases and programming domain terms, only return the translation result.`;
+        let userPrompt = this._defaultOption.userPrompt ? `${this._defaultOption.userPrompt}${content}` : `en => zh: ${content}`;
         const body = {
             model: this._defaultOption.model,
             temperature: 0.3,

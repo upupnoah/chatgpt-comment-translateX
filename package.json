@@ -2,10 +2,10 @@
   "name": "chatgpt-comment-translateX",
   "displayName": "chatgpt-comment-translateX",
   "description": "chatgpt translate source for comment-translate",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "publisher": "upupnoah",
   "engines": {
-    "vscode": "^1.70.0"
+    "vscode": "^1.80.0"
   },
   "categories": [
     "Other"
@@ -51,6 +51,16 @@
             "type": "string",
             "default": "gpt-3.5-turbo",
             "markdownDescription": "Custom model"
+          },
+          "chatgptTranslate.systemPrompt": {
+            "type": "string",
+            "default": "You are a professional translation engine in the IT field, do not translate noun phrases and programming domain terms, only return the translation result.",
+            "markdownDescription": "Custom system prompt"
+          },
+          "chatgptTranslate.userPrompt": { 
+            "type": "string",
+            "default": "en => zh: ",
+            "markdownDescription": "Custom user prompt"
           }
         }
       }
