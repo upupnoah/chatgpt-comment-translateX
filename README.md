@@ -12,6 +12,7 @@ This plugin provides a translation source for the "comment-translate" plugin. It
 1. Provide translation capabilities
 2. Provides online document link text
 3. Support for custom models and domains
+4. Support custom system prompts and user prompts
 
 ## Requirements
 Please install '[comment-translate](https://github.com/intellism/vscode-comment-translate)' to use
