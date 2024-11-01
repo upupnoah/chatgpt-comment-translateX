@@ -58,7 +58,7 @@ export class ChatGPTTranslate implements ITranslate {
         return defaultOption;
     }
     async translate(content: string, { to = 'auto' }: ITranslateOptions) {
-        const url = this._defaultOption.apiAddress + "/v1/chat/completions";
+        const url = this._defaultOption.apiAddress;
         if (!this._defaultOption.authKey) {
             throw new Error('Please check the configuration of authKey!');
         }
@@ -95,7 +95,7 @@ export class ChatGPTTranslate implements ITranslate {
 
 
     link(content: string, { to = 'auto' }: ITranslateOptions) {
-        let str = `${this._defaultOption.apiAddress}/v1/chat/completions/${convertLang(to)}/${encodeURIComponent(content)}`;
+        let str = `${this._defaultOption.apiAddress}/${convertLang(to)}/${encodeURIComponent(content)}`;
 
         return `[ChatGPT](${str})`;
     }
