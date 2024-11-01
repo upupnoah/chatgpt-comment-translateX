@@ -57,10 +57,25 @@
             "default": "You are a professional translation engine in the IT field, do not translate noun phrases and programming domain terms, only return the translation result.",
             "markdownDescription": "Custom system prompt"
           },
-          "chatgptTranslate.userPrompt": { 
+          "chatgptTranslate.userPrompt": {
             "type": "string",
             "default": "en => zh: ",
             "markdownDescription": "Custom user prompt"
+          },
+          "chatgptTranslate.temperature": {
+            "type": "number",
+            "default": 0.3,
+            "markdownDescription": "Custom temperature"
+          },
+          "chatgptTranslate.max_tokens": {
+            "type": "integer",
+            "default": 1200,
+            "markdownDescription": "Custom max_tokens"
+          },
+          "chatgptTranslate.top_p": {
+            "type": "number",
+            "default": 1,
+            "markdownDescription": "Custom top_p"
           }
         }
       }
