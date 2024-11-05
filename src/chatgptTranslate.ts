@@ -30,6 +30,9 @@ interface ChatGPTTranslateOption {
     model?: string;
     systemPrompt?: string; // 新增的系统提示配置项
     userPrompt?: string;  // 新增的用户提示配置项
+    temperature?: number;
+    max_tokens?: number;
+    top_p?: number;
 }
 
 export class ChatGPTTranslate implements ITranslate {
@@ -53,12 +56,15 @@ export class ChatGPTTranslate implements ITranslate {
             apiAddress: getConfig<string>('apiAddress'),
             model: getConfig<string>('model'),
             systemPrompt: getConfig<string>('systemPrompt'), // 获取系统提示的配置项
-            userPrompt: getConfig<string>('userPrompt')  // 获取用户提示的配置项
+            userPrompt: getConfig<string>('userPrompt'),  // 获取用户提示的配置项
+            temperature: getConfig<number>('temperature'),
+            max_tokens: getConfig<number>('max_tokens'),
+            top_p: getConfig<number>('top_p'),
         };
         return defaultOption;
     }
     async translate(content: string, { to = 'auto' }: ITranslateOptions) {
-        const url = this._defaultOption.apiAddress + "/v1/chat/completions";
+        const url = this._defaultOption.apiAddress;
         if (!this._defaultOption.authKey) {
             throw new Error('Please check the configuration of authKey!');
         }
@@ -66,9 +72,9 @@ export class ChatGPTTranslate implements ITranslate {
         let userPrompt = this._defaultOption.userPrompt ? `${this._defaultOption.userPrompt}${content}` : `en => zh: ${content}`;
         const body = {
             model: this._defaultOption.model,
-            temperature: 0.3,
-            max_tokens: 1200,
-            top_p: 1,
+            temperature: this._defaultOption.temperature ? this._defaultOption.temperature : 0.3,
+            max_tokens: this._defaultOption.max_tokens ? this._defaultOption.max_tokens : 1200,
+            top_p: this._defaultOption.top_p ? this._defaultOption.top_p : 1,
             frequency_penalty: 1,
             presence_penalty: 1,
             messages: [
@@ -95,7 +101,7 @@ export class ChatGPTTranslate implements ITranslate {
 
 
     link(content: string, { to = 'auto' }: ITranslateOptions) {
-        let str = `${this._defaultOption.apiAddress}/v1/chat/completions/${convertLang(to)}/${encodeURIComponent(content)}`;
+        let str = `${this._defaultOption.apiAddress}/${convertLang(to)}/${encodeURIComponent(content)}`;
 
         return `[ChatGPT](${str})`;
     }
